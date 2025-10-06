@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Days Since Birthday</title>
+
+  <!-- 📲 Make it behave like an app when added to Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Days Since Birthday">
+
+  <style>
+    body {
+      background-color: #f9fff9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    }
+    #days {
+      font-size: 20vw;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="days"></div>
+
+  <script>
+    const birthdayMonth = 10; // October
+    const birthdayDay = 2;
+
+    function updateDaysSinceBirthday() {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      let birthdayThisYear = new Date(currentYear, birthdayMonth - 1, birthdayDay);
+
+      if (today < birthdayThisYear) {
+        birthdayThisYear = new Date(currentYear - 1, birthdayMonth - 1, birthdayDay);
+      }
+
+      const diffTime = today - birthdayThisYear;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("days").textContent = diffDays;
+    }
+
+    updateDaysSinceBirthday();
+
+    function scheduleMidnightUpdate() {
+      const now = new Date();
+      const nextMidnight = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        0, 0, 1
+      );
+      const msUntilMidnight = nextMidnight - now;
+
+      setTimeout(() => {
+        updateDaysSinceBirthday();
+        scheduleMidnightUpdate();
+      }, msUntilMidnight);
+    }
+
+    scheduleMidnightUpdate();
+  </script>
+</body>
+</html>
